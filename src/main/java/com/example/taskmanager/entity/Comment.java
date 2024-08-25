@@ -5,19 +5,18 @@ import lombok.*;
 
 import java.time.Instant;
 
-@Getter
-@Setter
-@ToString
+
+@Entity
+@Table(name = "comment")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
-@Table(name = "comment")
 public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
 
     private String comment;
@@ -25,7 +24,7 @@ public class Comment {
     @OneToOne
     private User author;
 
-    private Instant create;
+    private Instant created;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "task_id")

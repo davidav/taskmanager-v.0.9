@@ -23,7 +23,7 @@ public class AuthController {
         return ResponseEntity.ok(securityService.authenticateUser(loginRequest));
     }
 
-    @PostMapping("/register")
+    @PostMapping("/create")
     public ResponseEntity<SimpleResponse> registerUser(@RequestBody CreateUserRequest createUserRequest) {
         if (userRepository.existsByUsername(createUserRequest.getUsername())) {
             throw new AlreadyExistsException("Username already exist");
