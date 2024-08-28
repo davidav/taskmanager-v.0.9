@@ -2,6 +2,7 @@ package com.example.taskmanager.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 
@@ -24,7 +25,8 @@ public class Comment {
     @OneToOne
     private User author;
 
-    private Instant created;
+    @CreationTimestamp
+    private Instant createAt;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "task_id")

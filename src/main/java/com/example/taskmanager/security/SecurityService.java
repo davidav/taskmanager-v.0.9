@@ -3,16 +3,18 @@ package com.example.taskmanager.security;
 import com.example.taskmanager.entity.RefreshToken;
 import com.example.taskmanager.entity.User;
 import com.example.taskmanager.exception.RefreshTokenException;
+import com.example.taskmanager.dto.auth.*;
 import com.example.taskmanager.repo.UserRepository;
 import com.example.taskmanager.security.jwt.JwtUtils;
 import com.example.taskmanager.service.RefreshTokenService;
-import com.example.taskmanager.web.model.*;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +30,10 @@ public class SecurityService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AuthResponse authenticateUser(LoginRequest loginRequest){
+    public AuthRs authenticateUser(LoginRq loginRq){
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginRequest.getUsername(),  //TODO
-                loginRequest.getPassword()
+                loginRq.getUsername(),
+                loginRq.getPassword()
         ));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         AppUserDetails userDetails = (AppUserDetails) authentication.getPrincipal();
@@ -40,7 +42,7 @@ public class SecurityService {
                 .toList();
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
 
-        return AuthResponse.builder()
+        return AuthRs.builder()
                 .id(userDetails.getId())
                 .token(jwtUtils.generateJwtToken(userDetails))
                 .refreshToken(refreshToken.getToken())
@@ -50,7 +52,7 @@ public class SecurityService {
                 .build();
     }
 
-    public void register(CreateUserRequest createUserRequest){
+    public void register(UpsertUserRq createUserRequest){
         var user = User.builder()
                 .username(createUserRequest.getUsername())
                 .email(createUserRequest.getEmail())
@@ -61,8 +63,8 @@ public class SecurityService {
         userRepository.save(user);
     }
 
-    public RefreshTokenResponse refreshToken(RefreshTokenRequest refreshTokenRequest){
-        String requestRefreshToken = refreshTokenRequest.getRefreshToken();
+    public RefreshTokenRs refreshToken(RefreshTokenRq refreshTokenRq){
+        String requestRefreshToken = refreshTokenRq.getRefreshToken();
         return refreshTokenService.findByRefreshToken(requestRefreshToken)
                 .map(refreshTokenService::checkRefreshToken)
                 .map(RefreshToken::getUserId)
@@ -71,7 +73,7 @@ public class SecurityService {
                             new   RefreshTokenException("Exception trying to get token for Id: {}" + userId));
                     String token = jwtUtils.generateTokenFromUsername(tokenOwner.getUsername());
 
-                    return new RefreshTokenResponse(token, refreshTokenService.createRefreshToken(userId).getToken());
+                    return new RefreshTokenRs(token, refreshTokenService.createRefreshToken(userId).getToken());
 
                 }).orElseThrow(() -> new RefreshTokenException(requestRefreshToken, "Refresh token not found"));
 
@@ -84,6 +86,16 @@ public class SecurityService {
 
             refreshTokenService.deleteRefreshTokenByUserId(userId);
         }
+    }
+
+    public User getByUsername(String username){
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
+    }
+
+    public User getById(Long id){
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User with id: " + id + " not found"));
     }
 
 

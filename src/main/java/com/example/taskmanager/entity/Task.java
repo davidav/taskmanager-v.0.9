@@ -3,6 +3,11 @@ package com.example.taskmanager.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -23,7 +28,8 @@ public class Task {
     private String description;
 
     @Enumerated(value = EnumType.STRING)
-    private Status status;
+    @Builder.Default
+    private Status status = Status.WAITING;
 
     @Enumerated(value = EnumType.STRING)
     private Priority priority;
@@ -33,5 +39,20 @@ public class Task {
 
     @OneToOne
     private User executor;
+
+    @CreationTimestamp
+    private Instant createdAt;
+
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @Builder.Default
+    private List<Comment> comments = new ArrayList<>();
+
+    public void addComment(Comment comment) {
+        if (comments == null){
+            comments = new ArrayList<>();
+        }
+        comments.add(comment);
+    }
 
 }
