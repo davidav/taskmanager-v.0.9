@@ -18,8 +18,6 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
     private String comment;
 
     @OneToOne
@@ -32,5 +30,4 @@ public class Comment {
     @JoinColumn(name = "task_id")
     @ToString.Exclude
     private Task task;
-
 }

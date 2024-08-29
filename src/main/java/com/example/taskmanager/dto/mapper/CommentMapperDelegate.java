@@ -8,9 +8,9 @@ import com.example.taskmanager.security.SecurityService;
 import com.example.taskmanager.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
-@Component
+
+
 public abstract class CommentMapperDelegate implements CommentMapper{
 
     @Autowired
@@ -28,15 +28,6 @@ public abstract class CommentMapperDelegate implements CommentMapper{
                 .task(taskService.findById(rq.getTaskId()))
                 .build();
     }
-
-    @Override
-    public Comment requestToComment(Long id, UpsertCommentRq rq, UserDetails userDetails) {
-        Comment comment = requestToComment(rq, userDetails);
-        comment.setId(id);
-
-        return comment;
-    }
-
 
     @Override
     public CommentRs commentToResponse(Comment comment) {

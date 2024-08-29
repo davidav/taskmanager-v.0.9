@@ -4,21 +4,21 @@ import com.example.taskmanager.dto.task.TaskRs;
 import com.example.taskmanager.dto.task.UpsertTaskRq;
 import com.example.taskmanager.entity.Task;
 import com.example.taskmanager.security.SecurityService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
+
 
 import java.util.stream.Collectors;
 
-@Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+
 public abstract class TaskMapperDelegate implements TaskMapper {
 
+
     @Autowired
-    private final CommentMapper commentMapper;
+    private SecurityService securityService;
     @Autowired
-    private final SecurityService securityService;
+    private CommentMapper commentMapper;
+
 
     public TaskRs taskToResponse(Task task){
 
@@ -50,12 +50,5 @@ public abstract class TaskMapperDelegate implements TaskMapper {
                 .build();
 
     }
-    @Override
-    public Task requestToTask(Long id, UpsertTaskRq rq, UserDetails userDetails){
-        Task task = requestToTask(rq, userDetails);
-        task.setId(id);
 
-        return task;
-
-    }
 }
