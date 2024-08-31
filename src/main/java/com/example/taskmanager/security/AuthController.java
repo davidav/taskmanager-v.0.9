@@ -1,4 +1,4 @@
-package com.example.taskmanager.controller;
+package com.example.taskmanager.security;
 
 import com.example.taskmanager.exception.AlreadyExistsException;
 import com.example.taskmanager.dto.ErrorRs;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-public class UserController {
+public class AuthController {
 
     private final UserRepository userRepository;
     private final SecurityService securityService;

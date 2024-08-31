@@ -9,25 +9,25 @@ public interface TaskSpecification {
 
     static Specification<Task> withFilter(TaskFilter filter) {
         return Specification.where(byAuthorId(filter.getAuthorId()))
-                        .and(byExecutorId(filter.getExecutorId()));
+                        .or(byExecutorId(filter.getExecutorId()));
     }
 
-    static Specification<Task> byExecutorId(Long id) {
+    static Specification<Task> byExecutorId(Long executorId) {
         return (root, query, criteriaBuilder) -> {
-            if (id == null){
+            if (executorId == null){
                 return null;
             }
-            return criteriaBuilder.equal(root.get("id"), id);
+            return criteriaBuilder.equal(root.get("executor").get("id"), executorId);
         };
     }
 
 
-    static Specification<Task> byAuthorId(Long id) {
+    static Specification<Task> byAuthorId(Long authorId) {
             return (root, query, criteriaBuilder) -> {
-                if (id == null){
+                if (authorId == null){
                     return null;
                 }
-                return criteriaBuilder.equal(root.get("id"), id);
+                return criteriaBuilder.equal(root.get("author").get("id"), authorId);
             };
 
     }

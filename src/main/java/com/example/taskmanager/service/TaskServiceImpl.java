@@ -1,10 +1,10 @@
 package com.example.taskmanager.service;
 
+import com.example.taskmanager.aop.TaskDeleteAvailable;
+import com.example.taskmanager.aop.TaskEditAvailable;
+import com.example.taskmanager.aop.TaskEditStatusAvailable;
 import com.example.taskmanager.dto.mapper.TaskMapper;
-import com.example.taskmanager.dto.task.TaskFilter;
-import com.example.taskmanager.dto.task.TaskListRs;
-import com.example.taskmanager.dto.task.UpsertTaskRq;
-import com.example.taskmanager.dto.task.TaskRs;
+import com.example.taskmanager.dto.task.*;
 import com.example.taskmanager.entity.Task;
 import com.example.taskmanager.repo.TaskRepository;
 import com.example.taskmanager.repo.TaskSpecification;
@@ -12,6 +12,7 @@ import com.example.taskmanager.security.SecurityService;
 import com.example.taskmanager.util.AppHelperUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.helpers.MessageFormatter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,6 +23,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
@@ -49,18 +51,31 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-//TODO @TaskEditAvailable
+    @TaskEditAvailable
     public TaskRs update(Long id, UpsertTaskRq rq, UserDetails userDetails) {
-
+        log.info("TaskService -> update ");
         Task existedTask = findById(id);
-        AppHelperUtils.copyNonNullProperties(rq, existedTask);
+        AppHelperUtils.copyNonNullProperties(taskMapper.requestToTask(rq, userDetails), existedTask);
 
         return taskMapper.taskToResponse(taskRepository.save(existedTask));
 
     }
 
     @Override
-//    TODO @TaskDeleteAvailable
+    @TaskEditStatusAvailable
+    public TaskRs updateStatus(Long id, UpsertStatusRq rq, UserDetails userDetails) {
+        log.info("TaskService -> updateStatus ");
+        Task existedTask = findById(id);
+        existedTask.setStatus(rq.getStatus());
+
+        return taskMapper.taskToResponse(taskRepository.save(existedTask));
+
+    }
+
+
+
+    @Override
+    @TaskDeleteAvailable
     public void deleteById(Long id, UserDetails userDetails) {
         taskRepository.deleteById(id);
     }

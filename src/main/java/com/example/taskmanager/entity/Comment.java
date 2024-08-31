@@ -20,7 +20,9 @@ public class Comment {
     private Long id;
     private String comment;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "author_id")
+    @ToString.Exclude
     private User author;
 
     @CreationTimestamp

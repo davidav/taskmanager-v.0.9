@@ -47,7 +47,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentRs update(Long id, UpsertCommentRq rq, UserDetails userDetails) {
 
         Comment existComment = findById(id);
-        AppHelperUtils.copyNonNullProperties(rq, existComment);
+        AppHelperUtils.copyNonNullProperties(commentMapper.requestToComment(rq, userDetails), existComment);
 
         return commentMapper.commentToResponse(commentRepository.save(existComment));
 

@@ -36,13 +36,12 @@ public class JwtUtils {
 
     public String getUsername(String token){
         return Jwts.parser().setSigningKey(jwtSecret)
-                .build().parseSignedClaims(token).getPayload().getSubject();
-
+                .parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validate(String authToken){
         try {
-            Jwts.parser().setSigningKey(jwtSecret).build().parseSignedClaims(authToken);
+            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
         }catch (SignatureException e){
             log.error("Invalid signature: {}", e.getMessage());

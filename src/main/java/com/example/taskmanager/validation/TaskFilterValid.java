@@ -6,11 +6,11 @@ import jakarta.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = PagesFilterValidValidator.class)
+@Constraint(validatedBy = TaskFilterValidValidator.class)
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PagesFilterValid {
-    String message() default "Pagination fields must be specified";
+public @interface TaskFilterValid {
+    String message() default "Pagination fields must be specified.";
 
     Class<?>[] groups() default {};
 

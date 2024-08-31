@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/comment")
+@RequestMapping("/api/v1/comment")
 @Tag(name = "Comment", description = "Comment API")
 public class CommentController {
 
@@ -28,8 +28,8 @@ public class CommentController {
 
     @Operation(
             summary = "Get comment by id",
-            description = "Return comment, userId, newsId comment's with a specific ID. " +
-                    "Available only to users with a roles ADMIN, MODERATOR, USER",
+            description = "Return comment with a specific ID. " +
+                    "Allowed to all registered users",
             tags = {"comment", "id"}
     )
     @ApiResponses({
@@ -43,14 +43,15 @@ public class CommentController {
             )
     })
     @GetMapping("/{id}")
-    @PreAuthorize(value = "hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_MODERATOR')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public CommentRs findById(@PathVariable Long id) {
         return commentService.findByIdRs(id);
     }
 
     @Operation(
             summary = "Create new comment",
-            description = "Return new comment. Available only to users with a roles ADMIN, MODERATOR, USER",
+            description = "Return created comment. " +
+                    "Allowed to all registered users",
             tags = {"comment", "id"}
     )
     @ApiResponses({
@@ -64,7 +65,7 @@ public class CommentController {
             )
     })
     @PostMapping
-    @PreAuthorize(value = "hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_MODERATOR')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public CommentRs create(@RequestBody @Valid UpsertCommentRq rq,
                                             @AuthenticationPrincipal UserDetails userDetails) {
 
@@ -88,6 +89,7 @@ public class CommentController {
             )
     })
     @PutMapping("/{id}")
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     public CommentRs update(@PathVariable Long id, @RequestBody @Valid UpsertCommentRq request,
                                             @AuthenticationPrincipal UserDetails userDetails) {
 
@@ -98,7 +100,7 @@ public class CommentController {
     @Operation(
             summary = "Delete comment",
             description = "Delete comment with a specific ID. " +
-                    "Available only to users with a roles ADMIN, MODERATOR or USER the creator news",
+                    "Available only to users with a roles ADMIN",
             tags = {"comment", "id"}
     )
     @ApiResponses({
@@ -111,7 +113,7 @@ public class CommentController {
             )
     })
     @DeleteMapping("/{id}")
-    @PreAuthorize(value = "hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_MODERATOR')")
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     public void deleteById(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         commentService.deleteById(id, userDetails);
     }

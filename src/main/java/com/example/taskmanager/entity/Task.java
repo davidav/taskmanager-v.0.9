@@ -1,6 +1,7 @@
 package com.example.taskmanager.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -34,10 +35,16 @@ public class Task {
     @Enumerated(value = EnumType.STRING)
     private Priority priority;
 
-    @OneToOne
+    @ManyToOne()
+    @JoinColumn(name = "author_id")
+    @ToString.Exclude
+    @JsonIgnore
     private User author;
 
-    @OneToOne
+    @ManyToOne()
+    @JoinColumn(name = "executor_id")
+    @ToString.Exclude
+    @JsonIgnore
     private User executor;
 
     @CreationTimestamp

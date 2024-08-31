@@ -1,13 +1,13 @@
 package com.example.taskmanager.dto.task;
 
 
-import com.example.taskmanager.validation.PagesFilterValid;
+import com.example.taskmanager.validation.TaskFilterValid;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@PagesFilterValid
+@TaskFilterValid
 public class TaskFilter {
 
     private Integer pageSize;
