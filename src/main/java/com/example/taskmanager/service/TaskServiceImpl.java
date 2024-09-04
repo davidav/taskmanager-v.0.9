@@ -8,7 +8,6 @@ import com.example.taskmanager.dto.task.*;
 import com.example.taskmanager.entity.Task;
 import com.example.taskmanager.repo.TaskRepository;
 import com.example.taskmanager.repo.TaskSpecification;
-import com.example.taskmanager.security.SecurityService;
 import com.example.taskmanager.util.AppHelperUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +44,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskRs create(UpsertTaskRq rq, UserDetails userDetails) {
         Task task = taskMapper.requestToTask(rq, userDetails);
-        task.setAuthor(securityService.getByUsername(userDetails.getUsername()));
+        task.setAuthor(securityService.getByEmail(userDetails.getUsername()));
+
         return taskMapper.taskToResponse(taskRepository.save(task));
 
     }
@@ -53,7 +53,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @TaskEditAvailable
     public TaskRs update(Long id, UpsertTaskRq rq, UserDetails userDetails) {
-        log.info("TaskService -> update ");
+        log.info("TaskService -> update {}", id);
         Task existedTask = findById(id);
         AppHelperUtils.copyNonNullProperties(taskMapper.requestToTask(rq, userDetails), existedTask);
 

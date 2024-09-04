@@ -21,3 +21,6 @@ app:
     secret: "qBTmv4oXFFR2GwjexDJ4t6fsIUIUhhXqlktXjXdkcyygs8nPVEwMfo29VDRRepYDVV5IkIxBMzr7OEHXEHd37w=="
     tokenExpiration: 300m
     refreshTokenExpiration: 600m
+
+
+

@@ -1,10 +1,11 @@
-package com.example.taskmanager.security;
+package com.example.taskmanager.controller;
 
 import com.example.taskmanager.exception.AlreadyExistsException;
 import com.example.taskmanager.dto.ErrorRs;
 import com.example.taskmanager.dto.auth.*;
 import com.example.taskmanager.repo.UserRepository;
-import com.example.taskmanager.security.SecurityService;
+import com.example.taskmanager.service.SecurityService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@Tag(name = "Auth", description = "User registration and login")
 public class AuthController {
 
     private final UserRepository userRepository;
@@ -26,6 +28,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<ErrorRs> registerUser(@RequestBody UpsertUserRq createUserRequest) {
+
         if (userRepository.existsByUsername(createUserRequest.getUsername())) {
             throw new AlreadyExistsException("Username already exist");
         }

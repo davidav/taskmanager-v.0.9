@@ -3,7 +3,7 @@ package com.example.taskmanager.dto.mapper;
 import com.example.taskmanager.dto.task.TaskRs;
 import com.example.taskmanager.dto.task.UpsertTaskRq;
 import com.example.taskmanager.entity.Task;
-import com.example.taskmanager.security.SecurityService;
+import com.example.taskmanager.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -20,14 +20,13 @@ public abstract class TaskMapperDelegate implements TaskMapper {
     private CommentMapper commentMapper;
 
 
-    public TaskRs taskToResponse(Task task){
+    public TaskRs taskToResponse(Task task) {
 
-        return TaskRs.builder()
+        TaskRs taskRs = TaskRs.builder()
                 .id(task.getId())
                 .title(task.getTitle())
                 .description(task.getDescription())
                 .authorId(task.getAuthor().getId())
-                .executorId(task.getExecutor().getId())
                 .status(task.getStatus())
                 .priority(task.getPriority())
                 .createdAt(task.getCreatedAt())
@@ -36,19 +35,28 @@ public abstract class TaskMapperDelegate implements TaskMapper {
                         .collect(Collectors.toList()))
                 .build();
 
+        if (task.getExecutor() != null){
+            taskRs.setExecutorId(task.getExecutor().getId());
+        }
+
+        return taskRs;
     }
 
     @Override
     public Task requestToTask(UpsertTaskRq rq, UserDetails userDetails) {
-        return Task.builder()
+        Task task = Task.builder()
                 .title(rq.getTitle())
                 .description(rq.getDescription())
-                .author(securityService.getByUsername(userDetails.getUsername()))
-                .executor(securityService.getById(rq.getExecutorId()))
+                .author(securityService.getByEmail(userDetails.getUsername()))
                 .status(rq.getStatus())
                 .priority(rq.getPriority())
                 .build();
 
+        if (rq.getExecutorId() != null) {
+            task.setExecutor(securityService.getById(rq.getExecutorId()));
+        }
+
+        return task;
     }
 
 }

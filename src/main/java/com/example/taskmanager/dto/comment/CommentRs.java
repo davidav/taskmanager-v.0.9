@@ -1,6 +1,7 @@
 package com.example.taskmanager.dto.comment;
 
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,7 +10,7 @@ import java.time.Instant;
 
 @Data
 @Builder
-//@UserFilterValid
+@Schema(description = "Comments response")
 public class CommentRs {
 
     private Long id;

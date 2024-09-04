@@ -51,8 +51,8 @@ public class CommentController {
     @Operation(
             summary = "Create new comment",
             description = "Return created comment. " +
-                    "Allowed to all registered users",
-            tags = {"comment", "id"}
+                    "Allowed to all registered users"
+//            tags = {"comment", "id"}
     )
     @ApiResponses({
             @ApiResponse(
@@ -75,8 +75,8 @@ public class CommentController {
 
     @Operation(
             summary = "Edit comment",
-            description = "Return edited comment. Only the creator comment can edit it",
-            tags = {"comment", "id"}
+            description = "Return edited comment. Only the creator comment can edit it"
+//            tags = {"comment", "id"}
     )
     @ApiResponses({
             @ApiResponse(
@@ -100,8 +100,8 @@ public class CommentController {
     @Operation(
             summary = "Delete comment",
             description = "Delete comment with a specific ID. " +
-                    "Available only to users with a roles ADMIN",
-            tags = {"comment", "id"}
+                    "Available only to users with a roles ADMIN"
+//            tags = {"comment", "id"}
     )
     @ApiResponses({
             @ApiResponse(

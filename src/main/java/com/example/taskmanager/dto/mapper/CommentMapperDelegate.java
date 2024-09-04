@@ -4,7 +4,7 @@ package com.example.taskmanager.dto.mapper;
 import com.example.taskmanager.dto.comment.CommentRs;
 import com.example.taskmanager.dto.comment.UpsertCommentRq;
 import com.example.taskmanager.entity.Comment;
-import com.example.taskmanager.security.SecurityService;
+import com.example.taskmanager.service.SecurityService;
 import com.example.taskmanager.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +24,7 @@ public abstract class CommentMapperDelegate implements CommentMapper{
 
         return Comment.builder()
                 .comment(rq.getComment())
-                .author(securityService.getByUsername(userDetails.getUsername()))
+                .author(securityService.getByEmail(userDetails.getUsername()))
                 .task(taskService.findById(rq.getTaskId()))
                 .build();
     }

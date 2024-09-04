@@ -1,6 +1,7 @@
 package com.example.taskmanager.security;
 
 import com.example.taskmanager.entity.User;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -11,6 +12,7 @@ import java.util.Collection;
 
 
 @RequiredArgsConstructor
+@Builder
 public class AppUserDetails implements UserDetails {
 
     private final User user;
@@ -35,7 +37,7 @@ public class AppUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return user.getEmail();
     }
 
     @Override

@@ -30,8 +30,8 @@ public class TaskController {
     @Operation(
             summary = "Get Task by id",
             description = "Return task and list of comments related with it.  " +
-                    "Allowed to all registered users",
-            tags = {"task", "id"}
+                    "Allowed to all registered users"
+//            tags = {"task", "id"}
     )
     @ApiResponses({
             @ApiResponse(
@@ -53,8 +53,8 @@ public class TaskController {
     @Operation(
             summary = "Create new task",
             description = "Return created task." +
-                    "Allowed to all registered users",
-            tags = {"task", "id"}
+                    "Allowed to all registered users"
+//            tags = {"task", "id"}
     )
     @ApiResponses({
             @ApiResponse(
@@ -77,8 +77,8 @@ public class TaskController {
     @Operation(
             summary = "Edit task",
             description = "Return edited task." +
-                    "Allowed to task's author.",
-            tags = {"task"}
+                    "Allowed to task's author."
+//            tags = {"task"}
     )
     @ApiResponses({
             @ApiResponse(
@@ -100,8 +100,8 @@ public class TaskController {
 
     @Operation(
             summary = "Edit status of task",
-            description = "Performer available change status of task",
-            tags = {"task"}
+            description = "Author or performer available change status of task"
+//            tags = {"task"}
     )
     @ApiResponses({
             @ApiResponse(
@@ -125,8 +125,8 @@ public class TaskController {
     @Operation(
             summary = "Delete task",
             description = "Delete task with a specific ID. " +
-                    "Available to task's author",
-            tags = {"task", "id"}
+                    "Available to task's author"
+//            tags = {"task", "id"}
     )
     @ApiResponses({
             @ApiResponse(
@@ -150,8 +150,8 @@ public class TaskController {
             description = "Returns tasks of a specific author or performer, " +
                     "as well as all comments on them, providing filtering " +
                     "and pagination of the output. " +
-                    "Allowed to all registered users",
-            tags = {"task", "id"}
+                    "Allowed to all registered users"
+//            tags = {"task", "id"}
     )
     @ApiResponses({
             @ApiResponse(

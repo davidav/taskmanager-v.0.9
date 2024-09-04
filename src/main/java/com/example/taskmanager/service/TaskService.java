@@ -10,7 +10,7 @@ public interface TaskService {
 
     TaskRs findByIdRs(Long id);
 
-    TaskRs create(UpsertTaskRq request, UserDetails userDetails);
+    TaskRs create(UpsertTaskRq request, UserDetails userDetailsd);
 
     TaskRs update(Long id, UpsertTaskRq request, UserDetails userDetails);
 

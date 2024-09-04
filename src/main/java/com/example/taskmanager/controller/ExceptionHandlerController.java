@@ -5,10 +5,12 @@ import com.example.taskmanager.exception.AlreadyExistsException;
 
 import com.example.taskmanager.exception.RefreshTokenException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.UnexpectedTypeException;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -57,6 +59,15 @@ public class ExceptionHandlerController {
 
 
         return buildRs(HttpStatus.BAD_REQUEST, errorMessage);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorRs> httpMessageNotReadableHandler(HttpMessageNotReadableException ex) {
+        return buildRs(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorRs> illegalArgumentHandler(IllegalArgumentException ex) {
+        return buildRs(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     private ResponseEntity<ErrorRs> buildRs(HttpStatus httpStatus, String message) {
