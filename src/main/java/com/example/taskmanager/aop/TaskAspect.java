@@ -1,11 +1,10 @@
 package com.example.taskmanager.aop;
 
-import com.example.taskmanager.dto.task.UpsertStatusRq;
 import com.example.taskmanager.dto.task.UpsertTaskRq;
 import com.example.taskmanager.entity.Task;
 import com.example.taskmanager.entity.User;
 import com.example.taskmanager.repo.TaskRepository;
-import com.example.taskmanager.security.SecurityService;
+import com.example.taskmanager.service.SecurityService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,8 +54,9 @@ public class TaskAspect {
                 MessageFormatter.format("Task with id {} not found", id).getMessage()));
         User requestUser = securityService.getByUsername(userDetails.getUsername());
 
-        if (!Objects.equals(requestUser.getId(), existTask.getExecutor().getId())){
-            throw new AuthenticationException("Changing task's status available performer");
+        if (!(Objects.equals(requestUser.getId(), existTask.getExecutor().getId()) ||
+                Objects.equals(requestUser.getId(), existTask.getAuthor().getId()))){
+            throw new AuthenticationException("Changing task's status available author or performer");
         }
 
     }
