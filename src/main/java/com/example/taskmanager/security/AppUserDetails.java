@@ -21,6 +21,10 @@ public class AppUserDetails implements UserDetails {
         return user.getId();
     }
 
+    public String getRealUsername() {
+        return user.getUsername();
+    }
+
     public String getEmail(){
         return user.getEmail();
     }
@@ -59,4 +63,6 @@ public class AppUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }

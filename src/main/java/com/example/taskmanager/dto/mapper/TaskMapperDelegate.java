@@ -43,6 +43,18 @@ public abstract class TaskMapperDelegate implements TaskMapper {
     }
 
     @Override
+    public UpsertTaskRq taskToUpsertTaskRq(Task task) {
+        return UpsertTaskRq.builder()
+                .title(task.getTitle())
+                .description(task.getDescription())
+                .status(task.getStatus())
+                .priority(task.getPriority())
+                .executorId(task.getExecutor().getId())
+                .build();
+
+    }
+
+    @Override
     public Task requestToTask(UpsertTaskRq rq, UserDetails userDetails) {
         Task task = Task.builder()
                 .title(rq.getTitle())

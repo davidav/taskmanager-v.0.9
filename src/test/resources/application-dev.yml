@@ -19,8 +19,6 @@ spring:
 app:
   jwt:
     secret: "qBTmv4oXFFR2GwjexDJ4t6fsIUIUhhXqlktXjXdkcyygs8nPVEwMfo29VDRRepYDVV5IkIxBMzr7OEHXEHd37w=="
-    tokenExpiration: 3m
-    refreshTokenExpiration: 60m
-
-
+    tokenExpiration: 300m
+    refreshTokenExpiration: 600m
 

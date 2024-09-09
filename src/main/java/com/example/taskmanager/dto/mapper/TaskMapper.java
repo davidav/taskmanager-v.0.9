@@ -25,4 +25,6 @@ public interface TaskMapper {
     Task requestToTask(UpsertTaskRq rq, UserDetails userDetails);
 
     TaskRs taskToResponse(Task task);
+
+    UpsertTaskRq taskToUpsertTaskRq(Task task);
 }

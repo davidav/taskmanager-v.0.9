@@ -21,7 +21,7 @@ public class LoginRq {
     private String email;
 
     @Schema(description = "password", example = "my_1secret1_password")
-    @Size(min = 8, max = 255, message = "The password length must be no more than 255 characters.")
+    @Size(min = 4, max = 255, message = "The password length must be from 4 no more than 255 characters.")
     @NotBlank(message = "Password cannot be empty")
     private String password;
 }
