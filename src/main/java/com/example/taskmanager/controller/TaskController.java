@@ -54,7 +54,6 @@ public class TaskController {
             summary = "Create new task",
             description = "Return created task." +
                     "Allowed to all registered users"
-//            tags = {"task", "id"}
     )
     @ApiResponses({
             @ApiResponse(
@@ -101,7 +100,7 @@ public class TaskController {
     @Operation(
             summary = "Edit status of task",
             description = "Author or performer available change status of task"
-//            tags = {"task"}
+
     )
     @ApiResponses({
             @ApiResponse(
@@ -115,7 +114,7 @@ public class TaskController {
     })
     @PutMapping("/status/{id}")
     @PreAuthorize(value = "hasAnyRole('ROLE_USER','ROLE_ADMIN')")
-    public TaskRs updateStatus(@PathVariable Long id, @RequestBody UpsertStatusRq rq,
+    public TaskRs updateStatus(@PathVariable Long id, @RequestBody  UpsertStatusRq rq,
                          @AuthenticationPrincipal UserDetails userDetails) {
         log.info("TaskController -> updateStatus id={} rq={}", id, rq);
         return taskService.updateStatus(id, rq, userDetails);
@@ -126,7 +125,7 @@ public class TaskController {
             summary = "Delete task",
             description = "Delete task with a specific ID. " +
                     "Available to task's author"
-//            tags = {"task", "id"}
+
     )
     @ApiResponses({
             @ApiResponse(
@@ -151,7 +150,7 @@ public class TaskController {
                     "as well as all comments on them, providing filtering " +
                     "and pagination of the output. " +
                     "Allowed to all registered users"
-//            tags = {"task", "id"}
+
     )
     @ApiResponses({
             @ApiResponse(
