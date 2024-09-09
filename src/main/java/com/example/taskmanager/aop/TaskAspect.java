@@ -1,6 +1,5 @@
 package com.example.taskmanager.aop;
 
-import com.example.taskmanager.dto.task.UpsertTaskRq;
 import com.example.taskmanager.entity.Task;
 import com.example.taskmanager.entity.User;
 import com.example.taskmanager.repo.TaskRepository;
