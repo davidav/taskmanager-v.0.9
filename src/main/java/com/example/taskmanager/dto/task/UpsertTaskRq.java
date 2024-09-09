@@ -28,7 +28,7 @@ public class UpsertTaskRq {
     @Schema(description = "Task status - WAITING, RUNNING, FINISHED", example = "WAITING")
     private Status status;
 
-    @Schema(description = "Performer id", example = "1L")
+    @Schema(description = "Performer id", example = "1")
     private Long executorId;
 
 }

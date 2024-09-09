@@ -1,13 +1,13 @@
 package com.example.taskmanager.controller;
 
-import com.example.taskmanager.dto.InfoRs;
 import com.example.taskmanager.exception.AlreadyExistsException;
+import com.example.taskmanager.dto.ErrorRs;
 import com.example.taskmanager.dto.auth.*;
 import com.example.taskmanager.repo.UserRepository;
 import com.example.taskmanager.service.SecurityService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -22,36 +22,36 @@ public class AuthController {
     private final SecurityService securityService;
 
     @PostMapping("/signin")
-    public AuthRs authUser(@RequestBody @Valid LoginRq loginRq) {
-        return securityService.authenticateUser(loginRq);
+    public ResponseEntity<AuthRs> authUser(@RequestBody LoginRq loginRq) {
+        return ResponseEntity.ok(securityService.authenticateUser(loginRq));
     }
 
     @PostMapping("/register")
-    public InfoRs registerUser(@RequestBody @Valid UpsertUserRq upsertUserRq) {
+    public ResponseEntity<ErrorRs> registerUser(@RequestBody UpsertUserRq createUserRequest) {
 
-        if (userRepository.existsByUsername(upsertUserRq.getUsername())) {
+        if (userRepository.existsByUsername(createUserRequest.getUsername())) {
             throw new AlreadyExistsException("Username already exist");
         }
 
-        if (userRepository.existsByEmail(upsertUserRq.getEmail())) {
+        if (userRepository.existsByEmail(createUserRequest.getEmail())) {
             throw new AlreadyExistsException("Email already exist");
         }
 
-        securityService.register(upsertUserRq);
+        securityService.register(createUserRequest);
 
-        return new InfoRs("User created");
+        return ResponseEntity.ok(new ErrorRs("User created"));
     }
 
     @PostMapping("/refresh-token")
-    public JwtAndRefreshTokenRs refreshToken(@RequestBody RefreshTokenRq rq) {
-        return securityService.refreshToken(rq);
+    public ResponseEntity<RefreshTokenRs> refreshToken(@RequestBody RefreshTokenRq request) {
+        return ResponseEntity.ok(securityService.refreshToken(request));
     }
 
     @PostMapping("/logout")
-    public InfoRs logoutUser(@AuthenticationPrincipal UserDetails userDetails){
+    public ResponseEntity<ErrorRs> logoutUser(@AuthenticationPrincipal UserDetails userDetails){
         securityService.logout();
 
-        return new InfoRs("User logout. Username is: " + userDetails.getUsername());
+        return ResponseEntity.ok(new ErrorRs("User logout. Username is: " + userDetails.getUsername()));
     }
 
 

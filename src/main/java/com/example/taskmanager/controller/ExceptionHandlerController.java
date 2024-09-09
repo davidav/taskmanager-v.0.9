@@ -5,6 +5,8 @@ import com.example.taskmanager.exception.AlreadyExistsException;
 
 import com.example.taskmanager.exception.RefreshTokenException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.UnexpectedTypeException;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ import java.util.List;
 
 @RestControllerAdvice
 public class ExceptionHandlerController {
+
     @ExceptionHandler(RefreshTokenException.class)
     public ResponseEntity<ErrorRs> refreshTokenExceptionHandler(RefreshTokenException ex) {
         return buildRs(HttpStatus.FORBIDDEN, ex.getMessage());
@@ -38,6 +41,11 @@ public class ExceptionHandlerController {
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ErrorRs> usernameNotFoundHandler(UsernameNotFoundException ex) {
         return buildRs(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorRs> authenticationHandler(AuthenticationException ex) {
+        return buildRs(HttpStatus.UNAUTHORIZED, ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

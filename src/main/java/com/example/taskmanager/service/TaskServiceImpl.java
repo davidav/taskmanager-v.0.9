@@ -27,6 +27,7 @@ public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
+    private final SecurityService securityService;
 
     @Override
     public Task findById(Long id) {
@@ -43,6 +44,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskRs create(UpsertTaskRq rq, UserDetails userDetails) {
         Task task = taskMapper.requestToTask(rq, userDetails);
+        task.setAuthor(securityService.getByEmail(userDetails.getUsername()));
 
         return taskMapper.taskToResponse(taskRepository.save(task));
 

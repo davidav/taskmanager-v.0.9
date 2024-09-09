@@ -46,24 +46,24 @@ public class SecurityService {
                 .id(userDetails.getId())
                 .token(jwtUtils.generateJwtToken(userDetails))
                 .refreshToken(refreshToken.getToken())
-                .username(userDetails.getRealUsername())
+                .username(userDetails.getUsername())
                 .email(userDetails.getEmail())
                 .roles(roles)
                 .build();
     }
 
-    public void register(UpsertUserRq upsertUserRq){
+    public void register(UpsertUserRq createUserRequest){
         var user = User.builder()
-                .username(upsertUserRq.getUsername())
-                .email(upsertUserRq.getEmail())
-                .password(passwordEncoder.encode(upsertUserRq.getPassword()))
+                .username(createUserRequest.getUsername())
+                .email(createUserRequest.getEmail())
+                .password(passwordEncoder.encode(createUserRequest.getPassword()))
                 .build();
-        user.setRoles(upsertUserRq.getRoles());
+        user.setRoles(createUserRequest.getRoles());
 
         userRepository.save(user);
     }
 
-    public JwtAndRefreshTokenRs refreshToken(RefreshTokenRq refreshTokenRq){
+    public RefreshTokenRs refreshToken(RefreshTokenRq refreshTokenRq){
         String requestRefreshToken = refreshTokenRq.getRefreshToken();
         return refreshTokenService.findByRefreshToken(requestRefreshToken)
                 .map(refreshTokenService::checkRefreshToken)
@@ -71,10 +71,10 @@ public class SecurityService {
                 .map(userId ->{
                     User tokenOwner = userRepository.findById(userId).orElseThrow(() ->
                             new   RefreshTokenException("Exception trying to get token for Id: {}" + userId));
-
+//                    String token = jwtUtils.generateTokenFromUsername(tokenOwner.getUsername());
                     String token = jwtUtils.generateJwtTokenFromEmail(tokenOwner.getEmail());
 
-                    return new JwtAndRefreshTokenRs(token, refreshTokenService.createRefreshToken(userId).getToken());
+                    return new RefreshTokenRs(token, refreshTokenService.createRefreshToken(userId).getToken());
 
                 }).orElseThrow(() -> new RefreshTokenException(requestRefreshToken, "Refresh token not found"));
 

@@ -31,11 +31,12 @@ public class TaskAspect {
     public void editBefore(JoinPoint joinPoint) throws AuthenticationException {
         Object[] args = joinPoint.getArgs();
         Long id = (Long) args[0];
+        UpsertTaskRq taskRq = (UpsertTaskRq) args[1];
         UserDetails userDetails = (UserDetails) args[2];
 
         Task existTask = taskRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
                 MessageFormatter.format("Task with id {} not found", id).getMessage()));
-        User requestUser = securityService.getByEmail(userDetails.getUsername());
+        User requestUser = securityService.getByUsername(userDetails.getUsername());
 
         if (!Objects.equals(requestUser.getId(), existTask.getAuthor().getId())) {
             throw new AuthenticationException("Edit task available author.");
@@ -51,7 +52,7 @@ public class TaskAspect {
 
         Task existTask = taskRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
                 MessageFormatter.format("Task with id {} not found", id).getMessage()));
-        User requestUser = securityService.getByEmail(userDetails.getUsername());
+        User requestUser = securityService.getByUsername(userDetails.getUsername());
 
         if (!(Objects.equals(requestUser.getId(), existTask.getExecutor().getId()) ||
                 Objects.equals(requestUser.getId(), existTask.getAuthor().getId()))){
@@ -67,7 +68,7 @@ public class TaskAspect {
         UserDetails userDetails = (UserDetails) args[1];
         Task existTask = taskRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
                 MessageFormatter.format("Task with id {} not found", id).getMessage()));
-        User requestUser = securityService.getByEmail(userDetails.getUsername());
+        User requestUser = securityService.getByUsername(userDetails.getUsername());
         if (!Objects.equals(requestUser.getId(), existTask.getAuthor().getId())) {
             throw new AuthenticationException("Delete task available author");
         }

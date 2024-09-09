@@ -100,7 +100,6 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.16.0</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -114,7 +113,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-testcontainers</artifactId>
-			<version>3.2.0</version>
+			<version>3.3.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -133,12 +132,6 @@
 			<groupId>com.redis</groupId>
 			<artifactId>testcontainers-redis</artifactId>
 			<version>2.2.2</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.redis.testcontainers</groupId>
-			<artifactId>testcontainers-redis-junit-jupiter</artifactId>
-			<version>1.4.6</version>
 			<scope>test</scope>
 		</dependency>
 
